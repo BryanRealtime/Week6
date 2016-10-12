@@ -17,51 +17,71 @@ class Vector2D
 	Vec x_, y_;
 };
 
-//template<class element>
-//class GeometricObject
-//{	
-//public:
-//	element o_x, o_y, o_r, o_w; //coordinates, radious, line width of an object
-//};
-//
-//class Box : GeometricObject<class element>
-//{
-//public:
-//	Box() {};
-//
-//	void draw()
-//	{
-//		//instant GeometricObject info.
-//		o_x = 100;
-//		o_y = 100;
-//		o_r = 40;
-//		o_w = 3;
-//
-//		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x - (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
-//		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x + (o_r / 2)), (o_y - (o_r / 2)), 1.0f, 0.0f, 0.0f);
-//		drawLine((o_x - (o_r / 2)), (o_y + (o_r / 2)), (o_x + (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
-//		drawLine((o_x + (o_r / 2)), (o_y - (o_r / 2)), (o_x + (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
-//	}
-//
-//};
-//
-//class Circle :GeometricObject<class element>
-//{
-//public:
-//	Circle() {};
-//
-//	void draw()
-//	{
-//		//instant GeometricObject info.
-//		o_x = 300;
-//		o_y = 300;
-//		o_r = 40;
-//		o_w = 5;
-//
-//		drawCircle(o_x, o_y, o_r, o_w, 0.0f, 0.0f, 1.0f);
-//	}
-//};
 
+class GeometricObjectInterface
+{
+public:
+	virtual void draw() {}
+};
+
+template<class Shape>
+class GeometricObject : public GeometricObjectInterface
+{
+public:
+	void draw()
+	{
+		Shape object;
+		object.draw();
+	}
+};
+
+
+class Box
+{
+private:
+	int o_x, o_y, o_r, o_w;
+
+public:
+	void setElements(int x, int y, int r, int w)
+	{
+		o_x = x;
+		o_y = y;
+		o_r = r;
+		o_w = w;
+	}
+
+	void draw()
+	{
+		setElements(100, 100, 30, 3);
+
+		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x - (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
+		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x + (o_r / 2)), (o_y - (o_r / 2)), 1.0f, 0.0f, 0.0f);
+		drawLine((o_x - (o_r / 2)), (o_y + (o_r / 2)), (o_x + (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
+		drawLine((o_x + (o_r / 2)), (o_y - (o_r / 2)), (o_x + (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
+	}
+
+};
+
+class Circle
+{
+private:
+	int o_x, o_y, o_r, o_w;
+
+public:
+	void setElements(int x, int y, int r, int w)
+	{
+		o_x = x;
+		o_y = y;
+		o_r = r;
+		o_w = w;
+	}
+
+	void draw()
+	{
+		setElements(300, 300, 30, 5);
+		drawCircle(o_x, o_y, o_r, o_w, 0.0f, 0.0f, 1.0f);
+	}
+};
 
 
 
@@ -88,7 +108,7 @@ int main(void)
 	print(2.345f);
 	print("Hello World");
 
-	
+
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -137,14 +157,12 @@ void drawOnPixelBuffer()
 	//std::memset(pixels, 1.0f, sizeof(float)*width*height * 3); // doesn't work
 	std::fill_n(pixels, width*height * 3, 1.0f);	// white background
 
-
-	//												//Question 3 Part
-	//std::vector<GeometricObject<element>*> obj_list;
-	//obj_list.push_back(new GeometricObject<Circle>);
-	//obj_list.push_back(new GeometricObject<Box>);
-	//for (auto itr : obj_list)
-	//	itr->draw();
-
+	//Question 3 Part
+	std::vector<GeometricObjectInterface*> obj_list;
+	obj_list.push_back(new GeometricObject<Circle>);
+	obj_list.push_back(new GeometricObject<Box>);
+	for (auto itr : obj_list)
+		itr->draw();
 }
 
 //w is the width of the circle'outer shell
@@ -154,7 +172,7 @@ void drawCircle(const int x, const int y, const int r, const int w, const float 
 	{
 		for (int b = 0; b < height; b++)
 		{
-			
+
 			if (sqrt((x - a)*(x - a) + (y - b)*(y - b)) <= r)
 			{
 				if (sqrt((x - a)*(x - a) + (y - b)*(y - b)) >= r - w)
@@ -163,19 +181,3 @@ void drawCircle(const int x, const int y, const int r, const int w, const float 
 		}
 	}
 }
-
-
-
-
-//void drawSquare()
-//{
-//
-//
-//	//draw inner Square
-//	drawLine((x - (r / 2)), (y - (r / 2)), (x - (r / 2)), (y + (r / 2)), 1.0f, 0.0f, 0.0f);
-//	drawLine((x - (r / 2)), (y - (r / 2)), (x + (r / 2)), (y - (r / 2)), 1.0f, 0.0f, 0.0f);
-//	drawLine((x - (r / 2)), (y + (r / 2)), (x + (r / 2)), (y + (r / 2)), 1.0f, 0.0f, 0.0f);
-//	drawLine((x + (r / 2)), (y - (r / 2)), (x + (r / 2)), (y + (r / 2)), 1.0f, 0.0f, 0.0f);
-//
-//}
-//
