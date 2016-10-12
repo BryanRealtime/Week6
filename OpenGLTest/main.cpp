@@ -65,6 +65,8 @@ public:
 
 	void draw()
 	{
+		setElements(100, 100, 150, 3);
+
 		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x - (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
 		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x + (o_r / 2)), (o_y - (o_r / 2)), 1.0f, 0.0f, 0.0f);
 		drawLine((o_x - (o_r / 2)), (o_y + (o_r / 2)), (o_x + (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
@@ -89,6 +91,7 @@ public:
 
 	void draw()
 	{
+		setElements(400, 400, 60, 4);
 		drawCircle(o_x, o_y, o_r, o_w, 0.0f, 0.0f, 1.0f);
 	}
 };
@@ -173,11 +176,12 @@ void drawOnPixelBuffer()
 	obj_list.push_back(new GeometricObject<Box>);
 	for (auto itr : obj_list)
 	{
-		/*for (int i = START_COORDINATES; i < START_COORDINATES+(12*ONE_OBJ); i += ONE_OBJ)
+		itr->draw();
+		/*for (int i = START_COORDINATES; i < START_COORDINATES+(12*ONE_OBJ); i += ONE_OBJ) 
 		{
-			itr->setElements(i,i,40,5);*/
+			itr->setElements(i,i,40,5);
 			itr->draw();
-		//}
+		}*///This is used When you don't set the info of the Shape in each classes
 	}
 }
 
