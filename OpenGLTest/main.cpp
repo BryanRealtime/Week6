@@ -1,14 +1,20 @@
 #include "draw.h"
+#define ONE_OBJ 50
+#define START_COORDINATES 100
+using namespace std;
 
+//predefinition of Methods
 void drawPixel(const int& i, const int& j, const float& red, const float& green, const float& blue);
 void drawLine(const int& i0, const int& j0, const int& i1, const int& j1, const float& red, const float& green, const float& blue);
 void drawOnPixelBuffer();
 void drawCircle(const int x, const int y, const int r, const int w, const float red, const float green, const float blue);
 
+
+
 template<class T>
 void print(T input)
 {
-	std::cout << input << std::endl;
+	cout << input << endl;
 }
 
 template<class Vec>
@@ -21,16 +27,23 @@ class Vector2D
 class GeometricObjectInterface
 {
 public:
+	virtual void setElements(int x, int y, int r, int w) {}
 	virtual void draw() {}
 };
 
 template<class Shape>
 class GeometricObject : public GeometricObjectInterface
 {
+	Shape object;
 public:
+	
+	void setElements(int x, int y, int r, int w)
+	{
+		object.setElements(x,y,r,w);
+	}
+
 	void draw()
 	{
-		Shape object;
 		object.draw();
 	}
 };
@@ -52,8 +65,6 @@ public:
 
 	void draw()
 	{
-		setElements(100, 100, 30, 3);
-
 		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x - (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
 		drawLine((o_x - (o_r / 2)), (o_y - (o_r / 2)), (o_x + (o_r / 2)), (o_y - (o_r / 2)), 1.0f, 0.0f, 0.0f);
 		drawLine((o_x - (o_r / 2)), (o_y + (o_r / 2)), (o_x + (o_r / 2)), (o_y + (o_r / 2)), 1.0f, 0.0f, 0.0f);
@@ -78,7 +89,6 @@ public:
 
 	void draw()
 	{
-		setElements(300, 300, 30, 5);
 		drawCircle(o_x, o_y, o_r, o_w, 0.0f, 0.0f, 1.0f);
 	}
 };
@@ -155,14 +165,20 @@ void drawLine(const int& i0, const int& j0, const int& i1, const int& j1, const 
 void drawOnPixelBuffer()
 {
 	//std::memset(pixels, 1.0f, sizeof(float)*width*height * 3); // doesn't work
-	std::fill_n(pixels, width*height * 3, 1.0f);	// white background
+	fill_n(pixels, width*height * 3, 1.0f);	// white background
 
 	//Question 3 Part
-	std::vector<GeometricObjectInterface*> obj_list;
+	vector<GeometricObjectInterface*> obj_list;
 	obj_list.push_back(new GeometricObject<Circle>);
 	obj_list.push_back(new GeometricObject<Box>);
 	for (auto itr : obj_list)
-		itr->draw();
+	{
+		/*for (int i = START_COORDINATES; i < START_COORDINATES+(12*ONE_OBJ); i += ONE_OBJ)
+		{
+			itr->setElements(i,i,40,5);*/
+			itr->draw();
+		//}
+	}
 }
 
 //w is the width of the circle'outer shell
