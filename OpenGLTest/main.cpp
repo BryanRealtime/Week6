@@ -181,7 +181,7 @@ void drawOnPixelBuffer()
 		{
 			itr->setElements(i,i,40,5);
 			itr->draw();
-		}*///This is used When you don't set the info of the Shape in each classes
+		}*///This is used When you don't set the info(ex:x,y coordinates) of the Shape in each classes
 	}
 }
 
